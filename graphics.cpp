@@ -34,3 +34,34 @@ Graphics::~Graphics() {
 	TTF_Quit();
 	SDL_Quit();
 }
+
+void Graphics::HandleInput() {
+	while( SDL_PollEvent( &Event ) ) {
+		switch( Event.type ) {
+			case SDL_QUIT:
+				Running = false;
+				break;
+		 	case SDL_KEYDOWN:
+				switch( Event.key.keysym.sym ) {
+					case SDLK_ESCAPE:
+						Running = false;
+						break;
+				}
+			case SDL_MOUSEBUTTONDOWN:
+				switch( Event.button.button ) {
+					case SDL_BUTTON_LEFT:
+						printf( "Left Mouse Button was pressed.\n" );
+						break;
+					case SDL_BUTTON_RIGHT:
+						printf( "Right Mouse Button was pressed.\n" );
+						break;
+				}	
+			default:
+				break;
+		}
+	}
+}
+
+bool Graphics::IsRunning() {
+	return Running;
+}

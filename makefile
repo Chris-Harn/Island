@@ -11,7 +11,7 @@ main: main.o graphics.o
 main.o: main.cpp
 		g++ -c main.cpp -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
 graphics.o: graphics.cpp
-		g++ -c graphics.cpp graphics.h -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
+		g++ -c graphics.cpp graphics.h -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx -Wall -Wno-switch
 
 clean:
 		-rm -f *.o *.gch .*.swn .*.swo *.out *.txt *.swp main

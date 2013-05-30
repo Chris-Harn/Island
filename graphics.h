@@ -8,11 +8,14 @@ public:
 							Graphics();
 							~Graphics();
 	void					DrawBackground();
-	bool					Running;
+	void					HandleInput();
+	bool					IsRunning();
 private:
 	SDL_Surface*			Window;
 	SDL_Surface*			WorkSurface;
 	TTF_Font*				Font;
+	SDL_Event				Event;
+	bool					Running;
 };
 
 #endif

@@ -2,10 +2,9 @@
 
 int main( int argc, char **argv ) {
 	Graphics Engine;
-	while( Engine.Running ) {
+	while( Engine.IsRunning() ) {
 
-		Engine.Running = false;
-		SDL_Delay( 2000 );
+		Engine.HandleInput();
 	}
 
 	return 0;
