@@ -27,7 +27,7 @@ Graphics::Graphics() {
 }
 
 Graphics::~Graphics() {
-	printf( "Closing down all systems." );
+	printf( "Closing down all systems.\n" );
 	SDL_FreeSurface( Window );
 	TTF_CloseFont( Font );
 
@@ -64,4 +64,42 @@ void Graphics::HandleInput() {
 
 bool Graphics::IsRunning() {
 	return Running;
+}
+
+void Graphics::Stage1Generation() {
+	// Generates a 16 by 16 map that will serve as the base for the island
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+	Uint8 board[ 16 ][ 16 ] = { 0 };
+	
+	// Draw the inital 8 by 8 square in the middle
+	for( int x = 0; x < 8; x++ ) {
+		for( int y = 0; y < 8; y++ ) {
+			board[ x + 6 ][ y + 6 ] = 2;
+		}
+	}		
+
+	/*
+		if( SDL_MUSTLOCK( WorkSurface ) ) {
+			if( SDL_LockSurface( WorkSurface ) == false ) {
+				printf( "Screen was not able to lock." );
+				exit( 1 );
+			}
+		}
+
+		Uint8 yellow = SDL_MapRGB( screen->format, 0xff, 0xff, 0x00 );
+
+		PutPixel( WorkSurface, x, y, yellow );
+
+		if( SDL_MUSTLOCK( WorkSurface ) ) {
+			SDL_UnlockSurface( WorkSurface );
+		}
+
+		SDL_UpdateRect( screen, x, y, 1, 1 );
+	*/
+}
+
+void Graphics::PutPixel( SDL_Surface* screen, int x, int y ) {
+	Uint8* pixels = ( Uint8* ) screen->pixels;
+	Uint8* pixel = pixels + y * screen->pitch + x;
+	*pixel = SDL_MapRGB( screen->format, 0xff, 0xff, 0xff ); // make white
 }
