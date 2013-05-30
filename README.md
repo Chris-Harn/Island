@@ -1,4 +1,5 @@
-Island
+
+Procedural Island Generator
 ======
 
-Procedural Island Generator for an undisclosed simulation project.
+Procedural island generator for an undisclosed simulation project. Written using g++ and SDL.
