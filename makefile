@@ -6,10 +6,12 @@
 all: main
 		@echo Compiling the program...
 		@echo Use "./main" to run.
-main: main.o
-		g++ -o main main.o -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
+main: main.o graphics.o
+		g++ -o main main.o graphics.o -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
 main.o: main.cpp
 		g++ -c main.cpp -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
+graphics.o: graphics.cpp
+		g++ -c graphics.cpp graphics.h -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
 
 clean:
 		-rm -f *.o *.gch .*.swn .*.swo *.out *.txt *.swp main

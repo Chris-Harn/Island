@@ -1,14 +1,11 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
+#include "defines.h"
 
 int main( int argc, char **argv ) {
-	SDL_Surface *window;
-	SDL_Event event;
-	bool RUNNING = true;
+	Graphics Engine;
+	while( Engine.Running ) {
 
-	while( RUNNING ) {
-
-		RUNNING = false;
+		Engine.Running = false;
+		SDL_Delay( 2000 );
 	}
 
 	return 0;
