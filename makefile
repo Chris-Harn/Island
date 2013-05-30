@@ -11,3 +11,5 @@ main: main.o
 main.o: main.cpp
 		g++ -c main.cpp -Wall -ansi -pedantic -O1 -lSDL -lSDL_ttf -lSDL_gfx
 
+clean:
+		-rm -f *.o *.gch .*.swn .*.swo *.out *.txt *.swp main

@@ -2,6 +2,7 @@
 *.slo
 *.lo
 *.o
+main
 
 # Compiled Dynamic libraries
 *.so
@@ -11,3 +12,19 @@
 *.lai
 *.la
 *.a
+
+# Files Generated When Compiling
+*.gch
+*.swp
+*.swo
+*.swn
+.*.swn
+
+# Needed Files, But Can't Share
+*.dll
+*.ttf
+
+# Files For Testing
+*.bmp
+*.out
+*.txt
