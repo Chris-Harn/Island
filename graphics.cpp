@@ -1,29 +1,23 @@
 #include "graphics.h"
 
 Graphics::Graphics() {
-	if( SDL_Init( SDL_INIT_VIDEO ) == -1 ) {
-		printf( "SDL_INIT_VIDEO failed %s\n", SDL_GetError() );
-		exit( 1 );
-	}
+	
+	assert( SDL_Init( SDL_INIT_VIDEO ) != -1 && "SDL_Init failed to initalize." );
 
-	if( TTF_Init() == -1 ) {
-		printf( "TTF_Init failed to initalize.\n" );
-		exit( 1 );
-	}
+	assert( TTF_Init() != -1 && "TTF_Init failed to initalize." );
 
 	Window = SDL_SetVideoMode( 640, 480, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE  );
 
-	if( Window == NULL ) {
-		printf( "Window failed to set up correctly.\n" );
-		exit( 1 );
-	}
+	assert( Window != NULL && "Window failed to set up correctly." );
 
 	SDL_WM_SetCaption( "Procedural Island Generation", 0 );
 	SDL_ShowCursor( SDL_ENABLE );
 
 	Running = true;
 	
-	Font = TTF_OpenFont( "arial.ttf", 12 );
+	Font = TTF_OpenFont( "arial.ttf", 12 );\
+	
+	assert( Font != NULL && "arial.ttf failed to load." );
 }
 
 Graphics::~Graphics() {
@@ -46,6 +40,8 @@ void Graphics::HandleInput() {
 					case SDLK_ESCAPE:
 						Running = false;
 						break;
+					default:
+						break;
 				}
 			case SDL_MOUSEBUTTONDOWN:
 				switch( Event.button.button ) {
@@ -54,6 +50,8 @@ void Graphics::HandleInput() {
 						break;
 					case SDL_BUTTON_RIGHT:
 						printf( "Right Mouse Button was pressed.\n" );
+						break;
+					default:
 						break;
 				}	
 			default:
