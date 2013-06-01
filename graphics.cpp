@@ -10,6 +10,8 @@ Graphics::Graphics() {
 
 	assert( Window != NULL && "Window failed to set up correctly." );
 
+	WorkSurface = NULL;
+
 	SDL_WM_SetCaption( "Procedural Island Generation", 0 );
 	SDL_ShowCursor( SDL_ENABLE );
 
@@ -18,6 +20,9 @@ Graphics::Graphics() {
 	Font = TTF_OpenFont( "arial.ttf", 12 );
 	
 	assert( Font != NULL && "arial.ttf failed to load." );
+
+	SDL_FillRect( Window, NULL, SDL_MapRGB( Window->format, 0, 0, 0 ) );
+	SDL_Flip( Window );
 }
 
 Graphics::~Graphics() {
@@ -28,6 +33,7 @@ Graphics::~Graphics() {
 
 	TTF_Quit();
 	SDL_Quit();
+	printf( "Everything closed successfully.\n" );
 }
 
 void Graphics::HandleInput() {
@@ -69,9 +75,9 @@ void Graphics::Stage1Generation() {
 	// Generates a 16 by 16 map that will serve as the base for the island
 	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
 	Uint8 board[ 16 ][ 16 ];
-	Uint8 board[ 128 ][ 128 ];
+	// 	mUint8 board[ 128 ][ 128 ];
 
-
+	// Set everything to water
 	for( int x = 0; x < 16; x++ ) {
 		for( int y = 0; y < 16; y++ ) {
 			board[ x ][ y ] = 0;
@@ -84,6 +90,8 @@ void Graphics::Stage1Generation() {
 			board[ x + 6 ][ y + 6 ] = 2;
 		}
 	}		
+
+	Uint32 yellow = SDL_MapRGB( Window->format, 0xff, 0xff, 0x00 );
 
 	/*
 		if( SDL_MUSTLOCK( WorkSurface ) ) {
