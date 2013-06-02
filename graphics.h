@@ -10,11 +10,12 @@ public:
 	void					DrawBackground();
 	void					HandleInput();
 	bool					IsRunning();
-	void					Stage1Generation();
-	void					PutPixel( SDL_Surface* screen, int x, int y );
+	void					Stage1Generation( Uint8 board[][18] );
+	void					Stage2Generation( Uint8 board[][18], Uint8 board2[][144] );
+	void					PutPixel( SDL_Surface* screen, int x, int y, Uint8 Rb, Uint8 Gb, Uint8 Bb );
+	void					DrawScreen();
 private:
 	SDL_Surface*			Window;
-	SDL_Surface*			WorkSurface;
 	TTF_Font*				Font;
 	SDL_Event				Event;
 	bool					Running;
