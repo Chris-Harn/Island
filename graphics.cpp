@@ -89,42 +89,46 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 
 	// Start Randomly growing the land
 	// The more land surrounding it, the more the stand land will spawn
-	int growX = 0, growY = 0;
-	int xCoord = 5, yCoord = 5;
+	int xCoord = 5, yCoord = 5, grow = 0;
 	int amount;
 
-	
-	for( int x = 0; x < 8 + growX * 2; x++ ) {
-		amount = 1 + rand() % 6;
-		if( amount > 0 ){
-			board[ xCoord + x ][ yCoord ] = 2;
+	for( int i = 0; i < 3; i++ ) {		
+		for( int x = 0; x < 8 + grow * 2; x++ ) {
+			amount = 1 + rand() % 6;
+			if( amount > 4 ){
+				board[ xCoord + x ][ yCoord ] = 2;
+			}
 		}
-	}
 
-	xCoord += 7;
+		xCoord += 7 + grow * 2;
 
-	for( int y = 0; y < 8 + growY * 2; y++ ) {
-		amount = 1 + rand() % 6;
-		if( amount > 4 ) {
-			board[ xCoord ][ yCoord + y ] = 2;
+		for( int y = 0; y < 8 + grow * 2; y++ ) {
+			amount = 1 + rand() % 6;
+			if( amount > 4 ) {
+				board[ xCoord ][ yCoord + y ] = 2;
+			}
 		}
-	}
 
-	yCoord += 7;
-	for( int x = 0; x < 8 + growX * 2; x++ ) {
-		amount = 1 + rand() % 6;
-		if( amount > 4 ){
-			board[ xCoord - x ][ yCoord ] = 2;
+		yCoord += 7 + grow * 2;
+		for( int x = 0; x < 8 + grow * 2; x++ ) {
+			amount = 1 + rand() % 6;
+			if( amount > 4 ){
+				board[ xCoord - x ][ yCoord ] = 2;
+			}
 		}
-	}
-	xCoord -= 7;
-	for( int y = 0; y < 8 + growY * 2; y++ ) {
-		amount = 1 + rand() % 6;
-		if( amount > 4 ) {
-			board[ xCoord ][ yCoord - y ] = 2;
+		xCoord -= 7 +  grow * 2;
+		for( int y = 0; y < 8 + grow * 2; y++ ) {
+			amount = 1 + rand() % 6;
+			if( amount > 4 ) {
+				board[ xCoord ][ yCoord - y ] = 2;
+			}
 		}
-	}
+		yCoord -= 7 + grow * 2;
+		xCoord -= 1;
+		yCoord -= 1;
 
+		grow += 1;
+	}
 }
 
 void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
