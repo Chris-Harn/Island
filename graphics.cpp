@@ -18,6 +18,8 @@ Graphics::Graphics() {
 	Font = TTF_OpenFont( "arial.ttf", 12 );
 	
 	assert( Font != NULL && "arial.ttf failed to load." );
+	
+	srand( time( 0 ) );
 }
 
 Graphics::~Graphics() {
@@ -68,10 +70,9 @@ bool Graphics::IsRunning() {
 }
 
 void Graphics::Stage1Generation( Uint8 board[][18] ) {
-	// Generates a 18 by 18 map that will serve as the base for the island
-	// This map will only have water and grass to start out
-	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
-
+	// Generates an 18 by 18 map that will serve as the base for the island
+	// This map will only have water = 0 and grass = 2 to start out
+	
 	// Set everything to water
 	for( int x = 0; x < 18; x++ ) {
 		for( int y = 0; y < 18; y++ ) {
@@ -85,33 +86,57 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 			board[ x + 6 ][ y + 6 ] = 2;
 		}
 	}		
+
+	// Start Randomly growing the land
+	// The more land surrounding it, the more the stand land will spawn
+	int growX = 0, growY = 0;
+	int xCoord = 5, yCoord = 5;
+	int amount;
+
+	
+	for( int x = 0; x < 8 + growX * 2; x++ ) {
+		amount = 1 + rand() % 6;
+		if( amount > 0 ){
+			board[ xCoord + x ][ yCoord ] = 2;
+		}
+	}
+
+	xCoord += 7;
+
+	for( int y = 0; y < 8 + growY * 2; y++ ) {
+		amount = 1 + rand() % 6;
+		if( amount > 4 ) {
+			board[ xCoord ][ yCoord + y ] = 2;
+		}
+	}
+
+	yCoord += 7;
+	for( int x = 0; x < 8 + growX * 2; x++ ) {
+		amount = 1 + rand() % 6;
+		if( amount > 4 ){
+			board[ xCoord - x ][ yCoord ] = 2;
+		}
+	}
+	xCoord -= 7;
+	for( int y = 0; y < 8 + growY * 2; y++ ) {
+		amount = 1 + rand() % 6;
+		if( amount > 4 ) {
+			board[ xCoord ][ yCoord - y ] = 2;
+		}
+	}
+
 }
 
 void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
-int multX = 8, multY = 8;
-
-	/*
-	for( int x = 0; x < 18; x++ ) {
-		for( int y = 0; y < 18; y++ ) {
-			
-			for( int m = 0; m < 8; m++ ) {
-				for( int n = 0; n < 8; n++ ) {
-					board2[ m + x * multX  ][ n + y * multY ] = board[ x ][ y ];	
-				}
-			}
-			multX += 8;	
-		}
-		multX = 0;
-		multY += 8;
-	}
-    */
-
+	// Expand the map from 18x18 to 144 to 144 and give it other types of
+	// of land
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
 	for( int y = 0; y < 18; y++ ) {
 		for( int x = 0; x < 18; x++ ) {
 
 			for( int n = 0; n < 8; n++ ) {
 				for( int m = 0; m < 8; m++ ) {
-					board2[ m + x * multX ][ n + y * multY ] = board[ x ][ y ];
+					board2[ m + x * 8 ][ n + y * 8 ] = board[ x ][ y ];
 				}
 			}
 
@@ -134,8 +159,6 @@ int multX = 8, multY = 8;
 				default:
 					break;
 			}	
-
-
 		}
 	}
 		
@@ -143,7 +166,6 @@ int multX = 8, multY = 8;
 		SDL_UnlockSurface( Window );
 	}
 
-	
 	SDL_UpdateRect( Window, 0, 0, 100, 100 );
 }
 
