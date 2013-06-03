@@ -91,43 +91,84 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 	// The more land surrounding it, the more the stand land will spawn
 	int xCoord = 5, yCoord = 5, grow = 0;
 	int amount;
+	int count = 0;
+
+	// Variables that control the island generation
+	int seed = 24; 	// Generates a number between 0 and n - 1
+	int number = 22; // Amount the total must be higher than
+	int addition = 20; // Amount added for each land found
+	int division = 5; // Amount that the final addition amount is divided by
+	int plus = 0; // Amount added to the seed
 
 	for( int i = 0; i < 3; i++ ) {		
 		for( int x = 0; x < 8 + grow * 2; x++ ) {
-			amount = 1 + rand() % 6;
-			if( amount > 4 ){
+			for( int n = 0; n < 3; n++ ) {
+				for( int m = 0; 	m < 3; m++ ) {
+					if( board[ xCoord + x - 1 + m ][ yCoord - 1 + n ] == 2 ) {
+						count += addition;
+					}
+				}
+			}
+			amount = plus + count / division + rand() % seed;
+			if( amount > number ){
 				board[ xCoord + x ][ yCoord ] = 2;
 			}
+			count = 0;
 		}
 
 		xCoord += 7 + grow * 2;
 
 		for( int y = 0; y < 8 + grow * 2; y++ ) {
-			amount = 1 + rand() % 6;
-			if( amount > 4 ) {
+			for( int n = 0; n < 3; n++ ) {
+				for( int m = 0; m < 3; m++ ) {
+					if( board[ xCoord - 1 + m ][ yCoord + y - 1 + n ] == 2 ) {
+						count += addition;
+					}
+				}
+			}
+			amount = plus + count / division + rand() % seed;
+			if( amount > number ) {
 				board[ xCoord ][ yCoord + y ] = 2;
 			}
+			count = 0;	
 		}
 
 		yCoord += 7 + grow * 2;
 		for( int x = 0; x < 8 + grow * 2; x++ ) {
-			amount = 1 + rand() % 6;
-			if( amount > 4 ){
+			for( int n = 0; n < 3; n++ ) {
+				for( int m = 0; m < 3; m++ ) {
+					if( board[ xCoord - x - 1 + m ][ yCoord - 1 + n ] == 2 ) {
+						count += addition;
+					}
+				}
+			}
+			amount = plus + count / division + rand() % seed;
+			if( amount > number ){
 				board[ xCoord - x ][ yCoord ] = 2;
 			}
+			count = 0;
 		}
 		xCoord -= 7 +  grow * 2;
 		for( int y = 0; y < 8 + grow * 2; y++ ) {
-			amount = 1 + rand() % 6;
-			if( amount > 4 ) {
+			for( int n = 0; n < 3; n++ ) {
+				for( int m = 0; m < 3; m++ ) {
+					if( board[ xCoord - 1 + m ][ yCoord - y - 1 + n ] == 2 ) {
+						count += addition;
+					}
+				}
+			}
+			amount = plus + count / division + rand() % seed;
+			if( amount > number ) {
 				board[ xCoord ][ yCoord - y ] = 2;
 			}
+			count = 0;
 		}
 		yCoord -= 7 + grow * 2;
 		xCoord -= 1;
 		yCoord -= 1;
 
 		grow += 1;
+		count = 0;
 	}
 }
 
