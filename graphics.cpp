@@ -94,11 +94,11 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 	int count = 0;
 
 	// Variables that control the island generation
-	int seed = 24; 	// Generates a number between 0 and n - 1
-	int number = 22; // Amount the total must be higher than
-	int addition = 20; // Amount added for each land found
-	int division = 5; // Amount that the final addition amount is divided by
-	int plus = 0; // Amount added to the seed
+	int seed = 25; 	// Generates a number between 0 and n - 1
+	int number = 24; // Amount the total must be higher than
+	int addition = 6; // Amount added for each land found
+	int division = 2; // Amount that the final addition amount is divided by
+	int plus = 1; // Amount added to the seed
 
 	for( int i = 0; i < 3; i++ ) {		
 		for( int x = 0; x < 8 + grow * 2; x++ ) {
@@ -172,6 +172,8 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 	}
 }
 
+// 0 1 2 3 4 5 6 7 
+
 void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// Expand the map from 18x18 to 144 to 144 and give it other types of
 	// of land
@@ -181,12 +183,20 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 
 			for( int n = 0; n < 8; n++ ) {
 				for( int m = 0; m < 8; m++ ) {
-					board2[ m + x * 8 ][ n + y * 8 ] = board[ x ][ y ];
+					if( m < 2 || n < 2 || m > 5 || n > 5 ) {
+						board2[ m + x * 8 ][ n + y * 8 ] = 0;
+					} 
+					else {
+						board2[ m + x * 8 ][ n + y * 8 ] = board[ x ][ y ];
+					}
 				}
 			}
 
 		}
 	}
+	
+	// Begin cutting up the island. Cutting out the outside 50% of each
+	// grid square
 
 	if( SDL_MUSTLOCK( Window ) ) {
 		assert( SDL_LockSurface( Window ) < 0 );
