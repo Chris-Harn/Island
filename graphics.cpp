@@ -276,15 +276,86 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 		}
 	}	
 
+	// One again generate new sand based on surrouding pieces of sand
+	int xStart = 5, yStart = 5;
+	int xTotal = 139, yTotal = 139;
+	for( int i = 0; i < 72; i++ ) {
+		for( int x = xStart; x < xTotal; x++ ) {
+			if( board2[ x ][ yStart ] == 2 ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 1 ) {
+							amount = 1 + rand() % 100;
+							if( amount > 80 ){
+								board2[ x ][ yStart ] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for( int y = yStart; y < yTotal; y++ ) {
+			if( board2[ xTotal ][ y ] == 2 ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 1 ) {
+							amount = 1 + rand() % 100;							
+							if( amount > 80 ) {
+								board2[ xTotal ][ y ] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for( int x = xTotal; x > xStart; x-- ) {
+			if( board2[ x ][ yTotal ] == 2 ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 1 ) {
+							amount = 1 + rand() % 100;	
+							if( amount > 70 ) {
+								// board2[ x ][ yStart ] = 1;
+								board2[ x ][ yTotal ] = 1;
+							}	
+						}
+					}
+				}
+			}
+		}
+
+		for( int y = yTotal; y > yStart; y-- ) {
+			if( board2[ xStart ][ y ] == 2 ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 1 ) {
+							amount = 1 + rand() % 100;
+							if( amount > 80 ) {
+								board2[ xStart ][ y ] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		xStart++;
+		xTotal--;
+		yStart++;
+		yTotal--;
+	}
+
 	// Variables that control the sand generation
-	seed = 100; 	// Generates a number between 0 and n - 1 
-	number = 90; // Amount the total must be higher than 
-	addition = 7; // Amount added for each land found
-	division = 1; // Amount that the final addition amount is divided by
+	seed = 25; 	// Generates a number between 0 and n - 1 
+	number = 34; // Amount the total must be higher than 
+	addition = 18; // Amount added for each land found
+	division = 3; // Amount that the final addition amount is divided by
 	plus = 1; // Amount added to the seed
 
 	// Once again generate new land based on surrounding pieces of land
-	for( int i = 0; i < 5; i++ ) {
+	for( int i = 0; i < 1; i++ ) {
 		for( int y = 0; y < 144; y++ ) {
 			for( int x = 0; x < 144; x++ ) {	
 				if( board2[ x ][ y ] == 2 ) {
