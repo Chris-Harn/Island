@@ -14,7 +14,7 @@ Graphics::Graphics() {
 	SDL_ShowCursor( SDL_ENABLE );
 
 	Running = true;
-	
+			
 	Font = TTF_OpenFont( "arial.ttf", 12 );
 	
 	assert( Font != NULL && "arial.ttf failed to load." );
@@ -43,6 +43,9 @@ void Graphics::HandleInput() {
 					case SDLK_ESCAPE:
 						Running = false;
 						break;
+					case SDLK_SPACE:
+						SDL_Delay( 1000 );
+						break;			
 					default:
 						break;
 				}
@@ -287,7 +290,8 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 1 ) {
 							amount = 1 + rand() % 100;
 							if( amount > 80 ){
-								board2[ x ][ yStart ] = 1;
+								board2[ x ][ yTotal ] = 1;
+								// board2[ x ][ yStart ] = 1;
 							}
 						}
 					}
@@ -301,7 +305,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 1 ) {
 							amount = 1 + rand() % 100;							
-							if( amount > 80 ) {
+							if( amount > 85 ) {
 								board2[ xTotal ][ y ] = 1;
 							}
 						}
@@ -317,8 +321,8 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 1 ) {
 							amount = 1 + rand() % 100;	
 							if( amount > 70 ) {
-								// board2[ x ][ yStart ] = 1;
-								board2[ x ][ yTotal ] = 1;
+								board2[ x ][ yStart ] = 1;
+								// board2[ x ][ yTotal ] = 1;
 							}	
 						}
 					}
@@ -332,7 +336,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 1 ) {
 							amount = 1 + rand() % 100;
-							if( amount > 80 ) {
+							if( amount > 85 ) {
 								board2[ xStart ][ y ] = 1;
 							}
 						}
