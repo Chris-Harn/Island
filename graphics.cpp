@@ -94,9 +94,9 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 	int count = 0;
 
 	// Variables that control the island generation
-	int seed = 25; 	// Generates a number between 0 and n - 1
-	int number = 24; // Amount the total must be higher than
-	int addition = 6; // Amount added for each land found
+	int seed = 25; 	// Generates a number between 0 and n - 1 // 25
+	int number = 24; // Amount the total must be higher than  // 24
+	int addition = 7; // Amount added for each land found
 	int division = 2; // Amount that the final addition amount is divided by
 	int plus = 1; // Amount added to the seed
 
@@ -172,12 +172,14 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 	}
 }
 
-// 0 1 2 3 4 5 6 7 
-
 void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// Expand the map from 18x18 to 144 to 144 and give it other types of
 	// of land
 	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+
+	
+	// Begin cutting up the island. Cutting out the outside 50% of each
+	// grid square
 	for( int y = 0; y < 18; y++ ) {
 		for( int x = 0; x < 18; x++ ) {
 
@@ -194,10 +196,118 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 
 		}
 	}
-	
-	// Begin cutting up the island. Cutting out the outside 50% of each
-	// grid square
 
+	// Begin filling in between the now cut up squares	
+	// First we draw in the horizontal squares
+	for( int y = 0; y < 144; y++ ) {
+		for( int x = 2; x < 144; x += 8 ) {
+			if( board2[ x ][ y ] == 2 && board2[ x + 8 ][ y ] == 2 ) {
+				for( int i = x + 4; i < x + 8; i++ ) {
+					board2[ i ][ y ] = 2;
+				}
+			}				
+		}
+	}
+	
+	for( int x = 0; x < 144; x++ ) {
+		for( int y = 2; y < 144; y += 8 ) {
+			if( board2[ x ][ y ] == 2 && board2[ x ][ y + 8 ] == 2 ) {
+				for( int i = y + 4; i < y + 8; i++ ) {
+					board2[ x ][ i ] = 2;
+				}
+			}				
+		}
+	}
+	
+	// Variables that control the island generation
+	int seed = 40; 	// Generates a number between 0 and n - 1 // 25
+	int number = 40; // Amount the total must be higher than  // 24
+	int addition = 7; // Amount added for each land found
+	int division = 1; // Amount that the final addition amount is divided by
+	int plus = 1; // Amount added to the seed
+	int count, amount;
+
+	// Once again generate new land based on surrounding pieces of land
+	for( int i = 0; i < 3; i++ ) {
+		for( int y = 0; y < 144; y++ ) {
+			for( int x = 0; x < 144; x++ ) {	
+				if( board2[ x ][ y ] == 0 ) {
+					count = 0;
+					// Count the land in a 3x3 grid of the space
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; 	m < 3; m++ ) {
+							if( board2[ x - 1 + m ][ y - 1 + n ] == 2 ) {
+								count += addition;
+							}
+						}
+					}
+					amount = plus + count / division + rand() % seed;
+					if( amount > number ){
+						board2[ x ][ y ] = 2;
+					}
+				}
+			}
+		}
+	}	
+
+	// Clean up the outside portion of the map
+	for( int y = 0; y < 144; y++ ) {
+		for( int x = 0; x < 144; x++ ) {
+			if( x < 14 || y < 14 || x > 129 || y > 129 ) {
+				board2[ x ][ y ] = 0;
+			}
+		}
+	}
+
+	// Turn all land that borders water in to sand
+	for( int i = 0; i < 3; i++ ) {
+		for( int y = 0; y < 144; y++ ) {
+			for( int x = 0; x < 144; x++ ) {	
+				if( board2[ x ][ y ] == 2 ) {
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; m < 3; m++ ) {
+							if( board2[ x - 1 + m ][ y - 1 + n ] == 0 ) {
+								board2[ x ][ y ] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}	
+
+	// Variables that control the sand generation
+	seed = 100; 	// Generates a number between 0 and n - 1 
+	number = 90; // Amount the total must be higher than 
+	addition = 7; // Amount added for each land found
+	division = 1; // Amount that the final addition amount is divided by
+	plus = 1; // Amount added to the seed
+
+	// Once again generate new land based on surrounding pieces of land
+	for( int i = 0; i < 5; i++ ) {
+		for( int y = 0; y < 144; y++ ) {
+			for( int x = 0; x < 144; x++ ) {	
+				if( board2[ x ][ y ] == 2 ) {
+					count = 0;
+					// Count the land in a 3x3 grid of the space
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; 	m < 3; m++ ) {
+							if( board2[ x - 1 + m ][ y - 1 + n ] == 1 ) {
+								count += addition;
+							}
+						}
+					}
+					if( count != 0 ) {
+						amount = plus + count / division + rand() % seed;
+						if( amount > number ){
+							board2[ x ][ y ] = 1;
+						}
+					}
+				}
+			}
+		}
+	}	
+	// Render the new island to screen, pixel by pixel
 	if( SDL_MUSTLOCK( Window ) ) {
 		assert( SDL_LockSurface( Window ) < 0 );
 	}
@@ -207,6 +317,9 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 			switch( board2[ x ][ y ] ) {
 				case 0:
 					PutPixel( Window, x, y, 54, 73, 255 );
+					break;
+				case 1:
+					PutPixel( Window, x, y, 254, 255, 135 );
 					break;
 				case 2:
 					PutPixel( Window, x, y, 85, 200, 67 );
