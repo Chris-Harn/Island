@@ -179,7 +179,6 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// Expand the map from 18x18 to 144 to 144 and give it other types of
 	// of land
 	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
-
 	Uint8 board3[ 576 ][ 576 ];
 	
 	// Begin cutting up the island. Cutting out the outside 50% of each
@@ -359,7 +358,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	division = 3; // Amount that the final addition amount is divided by
 	plus = 1; // Amount added to the seed
 
-	// Once again generate new land based on surrounding pieces of land
+	// Once again generate new sand based on surrounding pieces of land
 	for( int i = 0; i < 1; i++ ) {
 		for( int y = 0; y < 144; y++ ) {
 			for( int x = 0; x < 144; x++ ) {	
@@ -405,18 +404,136 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 
 		}
 	}
+	
+	// Variables that control the forest generation
+	seed = 25; 	// Generates a number between 0 and n - 1 
+	number = 24; // Amount the total must be higher than 
+	addition = 7; // Amount added for each land found
+	division = 2; // Amount that the final addition amount is divided by
+	plus = 1; // Amount added to the seed
 
 	int locationX, locationY;
+	int maxX, maxY;
 	// Now start drawing the forest
 	for( int y = 0; y < 18; y++ ) {
 		for( int x = 0; x < 18; x++ ) {
 			if( board[ x ][ y ] > 27 && 1 + rand() % 8 > 2 ) {
 				locationX = 1 + rand() % 8;
 				locationY = 1 + rand() % 8; 
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						board2[ locationX + x * 8 - 1 + m ][ locationY + y * 8 - 1 + n ] = 3;
+					}
+				}
+
 				board2[ locationX + x * 8 ][ locationY + y * 8 ] = 3;
+				maxX = maxY = 2;	
+				for( int t = 0; t < 2 + rand() % 6; t++ ) {
+					for( int n = 0; n < maxY + 2; n++ ) {
+						for( int m = 0; m < maxX + 2; m++ ) {
+							count = 0;
+							// Count the land in a 3x3 grid of the space
+							for( int q = 0; q < 3; q++ ) {
+								for( int w = 0; w < 3; w++ ) {
+									if( board2[ locationX + x * 8 -maxX + m + q - 1 ][ locationY + y * 8 - maxY + w - 1 ] == 3 ) {
+										count += addition;
+									}
+								}
+							}
+							amount = plus + count / division + rand() % seed;
+							if( amount > number && board2[ locationX + x * 8 - maxX + m ][ locationY + y * 8 - maxY + n ] != 0 && board2[ locationX + x * 8 - maxX + m ][ locationY + y * 8 - maxY + n ] != 1 ) {
+								board2[ locationX + x * 8 - maxX + m ][ locationY + y * 8 - maxY + n ] = 3;
+							}
+						}
+				  	}	
+					maxX = maxY += 2;
+				}
+
 			} 
 		}
 	}
+	
+	// Pass over every piece of forest and get rid of the jagged edges
+	// Variables that control the forest generation
+	seed = 25; 	// Generates a number between 0 and n - 1 
+	number = 34; // Amount the total must be higher than 
+	addition = 7; // Amount added for each land found
+	division = 3; // Amount that the final addition amount is divided by
+	plus = 1; // Amount added to the seed
+
+	// Once again generate new forest based on surrounding pieces of land
+	for( int times = 0; times < 2; times++ ) {
+		xStart = 5, yStart = 5;
+		xTotal = 139, yTotal = 139;
+
+		for( int i = 0; i < 72; i++ ) {
+			for( int x = xStart; x < xTotal; x++ ) {
+				if( board2[ x ][ yStart ] == 2 || board2[ x ][ yStart ] == 1 ) {
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; m < 3; m++ ) {
+							if( board2[ x - 1 + m ][ yStart - 1 + n ] == 3 ) {
+								amount = 1 + rand() % 100;
+								if( amount > 75 ){
+									board2[ x ][ yStart ] = 3;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for( int y = yStart; y < yTotal; y++ ) {
+				if( board2[ xTotal ][ y ] == 2 || board2[ xTotal ][ y ] == 1 ) {
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; m < 3; m++ ) {
+							if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 3 ) {
+								amount = 1 + rand() % 100;							
+								if( amount > 75 ) {
+									board2[ xTotal ][ y ] = 3;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for( int x = xTotal; x > xStart; x-- ) {
+				if( board2[ x ][ yTotal ] == 2 || board2[ x ][ yTotal ] == 1 ) {
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; m < 3; m++ ) {
+							if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 3 ) {
+								amount = 1 + rand() % 100;	
+								if( amount > 75 ) {
+									board2[ x ][ yTotal ] = 3;
+								}	
+							}
+						}
+					}
+				}
+			}
+
+			for( int y = yTotal; y > yStart; y-- ) {
+				if( board2[ xStart ][ y ] == 2 || board2[ xStart ][ y ] == 1 ) {
+					for( int n = 0; n < 3; n++ ) {
+						for( int m = 0; m < 3; m++ ) {
+							if( board2[ xStart - 1 + m ][ y - 1 + n ] == 3 ) {
+								amount = 1 + rand() % 100;
+								if( amount > 75 ) {
+									board2[ xStart ][ y ] = 3;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			xStart++;
+			xTotal--;
+			yStart++;
+			yTotal--;
+		}
+	}
+
 
 	// Expand the map from 144x144 to 576x576 so that we can get the best
 	// picture when it renders.
