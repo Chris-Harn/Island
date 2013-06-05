@@ -383,22 +383,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 			}
 		}
 	}	
-
-	// Expand the map from 144x144 to 576x576 so that we can get the best
-	// picture when it renders.
-	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
-	for( int y = 0; y < 144; y++ ) {
-		for( int x = 0; x < 144; x++ ) {
-
-			for( int n = 0; n < 4; n++ ) {
-				for( int m = 0; m < 4; m++ ) {
-					board3[ m + x * 4 ][ n + y * 4 ] = board2[ x ][ y ];
-				}
-			}
-
-		}
-	}
-
+	
 	// Clear the first map to use to record possibities for forest
 	for( int y = 0; y < 18; y++ ) {
 		for( int x = 0; x < 18; x++ ) {
@@ -423,20 +408,37 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 
 	int locationX, locationY;
 	// Now start drawing the forest
-	if( int y = 0; y < 18; y++ ) {
-		if( int x = 0; x < 18; x++ ) {
-			if( board[ x ][ y ] > 25 ) {
+	for( int y = 0; y < 18; y++ ) {
+		for( int x = 0; x < 18; x++ ) {
+			if( board[ x ][ y ] > 27 && 1 + rand() % 8 > 2 ) {
 				locationX = 1 + rand() % 8;
 				locationY = 1 + rand() % 8; 
+				board2[ locationX + x * 8 ][ locationY + y * 8 ] = 3;
 			} 
 		}
 	}
+
+	// Expand the map from 144x144 to 576x576 so that we can get the best
+	// picture when it renders.
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+	for( int y = 0; y < 144; y++ ) {
+		for( int x = 0; x < 144; x++ ) {
+
+			for( int n = 0; n < 4; n++ ) {
+				for( int m = 0; m < 4; m++ ) {
+					board3[ m + x * 4 ][ n + y * 4 ] = board2[ x ][ y ];
+				}
+			}
+
+		}
+	}
+
 
 	// Render the new island to screen, pixel by pixel
 	if( SDL_MUSTLOCK( Window ) ) {
 		assert( SDL_LockSurface( Window ) < 0 );
 	}
-	
+
 	for( int x = 0; x < 576; x++ ) {
 		for( int y = 0; y < 576; y++ ) {
 			switch( board3[ x ][ y ] ) {
@@ -448,6 +450,9 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					break;
 				case 2:
 					PutPixel( Window, x, y, 85, 200, 67 );
+					break;
+				case 3:
+					PutPixel( Window, x, y, 7, 159, 15 );
 					break;
 				default:
 					break;
