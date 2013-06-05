@@ -178,7 +178,7 @@ void Graphics::Stage1Generation( Uint8 board[][18] ) {
 void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// Expand the map from 18x18 to 144 to 144 and give it other types of
 	// of land
-	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock
 	Uint8 board3[ 576 ][ 576 ];
 	
 	// Begin cutting up the island. Cutting out the outside 50% of each
@@ -426,7 +426,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					}
 				}
 
-				board2[ locationX + x * 8 ][ locationY + y * 8 ] = 3;
+				// board2[ locationX + x * 8 ][ locationY + y * 8 ] = 3;
 				maxX = maxY = 2;	
 				for( int t = 0; t < 2 + rand() % 6; t++ ) {
 					for( int n = 0; n < maxY + 2; n++ ) {
@@ -534,10 +534,341 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 		}
 	}
 
+	// Create Rock Formations to break up the shape of the map
+	for( int times = 0; times < 15 + rand() % 15; times++ ) {
+		locationX = 16 + rand() % 112;
+		locationY = 16 + rand() % 112;
+
+		board2[ locationX ][ locationY ] = 4;
+	
+		xStart = locationX - 1;
+		yStart = locationY - 1;
+		xTotal = locationX + 1;
+		yTotal = locationY + 1;
+	
+		for( int expand = 0; expand < 2 + rand() % 8; expand++ ) {
+			for( int x = xStart; x < xTotal + 1; x++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yStart ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yStart; y < yTotal + 1; y++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xTotal ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+			
+			for( int x = xTotal; x > xStart - 1; x-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yTotal ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yTotal; y > yStart - 1; y-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xStart ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+
+			xStart--;
+			yStart--;
+			xTotal++;
+			yTotal++;
+		}	
+	}
+
+	// Create a mountain range in the center
+	int choice;
+	for( int times = 0; times < 20 + rand() % 10; times++ ) {
+		choice = 1 + rand() % 4;
+		switch( choice ) {
+			case 1:
+				locationX = 62 + rand() % 16;
+				locationY = 56;
+				break;
+			case 2:
+				locationX = 84;
+				locationY = 62 + rand() % 16;
+				break;
+			case 3:
+				locationX = 78 - rand() % 16;
+				locationY = 84;
+				break;
+			case 4:
+				locationX = 56;
+				locationY = 62 + rand() % 16;
+				break;
+			default:
+				locationX = 14 + rand() % 130;
+				locationY = 14 + rand() % 130;
+				break;
+		}
+
+		board2[ locationX ][ locationY ] = 4;
+	
+		xStart = locationX - 1;
+		yStart = locationY - 1;
+		xTotal = locationX + 1;
+		yTotal = locationY + 1;
+	
+		for( int expand = 0; expand < 2 + rand() % 8; expand++ ) {
+			for( int x = xStart; x < xTotal + 1; x++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yStart ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yStart; y < yTotal + 1; y++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xTotal ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+			
+			for( int x = xTotal; x > xStart - 1; x-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yTotal ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yTotal; y > yStart - 1; y-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xStart ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+
+			xStart--;
+			yStart--;
+			xTotal++;
+			yTotal++;
+		}	
+	}
+	// Fill in holes in rock formations
+	for( int y = 16; y < 122; y++ ) {
+		for( int x = 16; x < 122; x++ ) {
+			if( board2[ x ][ y ] == 4 && board2[ x + 2 ][ y ] == 4 ) {
+				board2[ x + 1 ][ y ] = 4;
+			}
+	
+			if( board2[ x ][ y ] == 4 && board2[ x ][ y + 2 ] == 4 ) {
+				board2[ x ][ y + 1 ] = 4;
+			}
+		}
+	}
+
+	// Variables that control the rock generation
+	seed = 100; 	// Generates a number between 0 and n - 1 
+	number = 96 + addition + addition; // Amount the total must be higher than 
+	addition = 8; // Amount added for each land found
+	division = 1; // Amount that the final addition amount is divided by
+	plus = 1; // Amount added to the seed
+
+	// Once again generate new rock based on surrounding pieces of land
+	for( int i = 0; i < 5; i++ ) {
+		for( int y = 5; y < 134; y++ ) {
+			for( int x = 5; x < 134; x++ ) {	
+				count = 0;
+				// Count the land in a 3x3 grid of the space
+				for( int n = 1; n < 4; n += 2 ) {
+					for( int m = 1; m < 4; m += 2 ) {
+						if( board2[ x - 1 + m ][ y - 1 + n ] == 4 ) {
+							count += addition;
+						}
+					}
+				}
+				if( count != 0 ) {
+					amount = plus + count / division + rand() % seed;
+					if( amount > number ){
+						board2[ x ][ y ] = 4;
+					}
+				}
+			}
+		}
+	}	
+	
+	// Fill in holes in rock formations
+	for( int y = 16; y < 122; y++ ) {
+		for( int x = 16; x < 122; x++ ) {
+			if( board2[ x ][ y ] == 4 && board2[ x + 2 ][ y ] == 4 ) {
+				board2[ x + 1 ][ y ] = 4;
+			}
+	
+			if( board2[ x ][ y ] == 4 && board2[ x ][ y + 2 ] == 4 ) {
+				board2[ x ][ y + 1 ] = 4;
+			}
+		}
+	}
+	
+	/*
+	// Create Cloud Formations to break up the shape of the map
+	for( int times = 0; times < 10 + rand() % 12; times++ ) {
+		locationX = 16 + rand() % 112;
+		locationY = 16 + rand() % 112;
+
+		board2[ locationX ][ locationY ] = 4;
+	
+		xStart = locationX - 1;
+		yStart = locationY - 1;
+		xTotal = locationX + 1;
+		yTotal = locationY + 1;
+	
+		for( int expand = 0; expand < 2 + rand() % 8; expand++ ) {
+			for( int x = xStart; x < xTotal + 1; x++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yStart ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yStart; y < yTotal + 1; y++ ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xTotal ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+			
+			for( int x = xTotal; x > xStart - 1; x-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ x ][ yTotal ] = 4;
+							}
+						}
+					}
+				}
+			}
+	
+			for( int y = yTotal; y > yStart - 1; y-- ) {
+				for( int n = 0; n < 3; n++ ) {
+					for( int m = 0; m < 3; m++ ) {
+						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 4 ) {
+							if( 1 + rand() % 100 > 80 ) {
+								board2[ xStart ][ y ] = 4;
+							}
+						}
+					}
+				}
+	
+			}
+
+			xStart--;
+			yStart--;
+			xTotal++;
+			yTotal++;
+		}	
+	}
+
+	// Fill in holes in cloud formations
+	for( int y = 16; y < 122; y++ ) {
+		for( int x = 16; x < 122; x++ ) {
+			if( board2[ x ][ y ] == 4 && board2[ x + 2 ][ y ] == 4 ) {
+				board2[ x + 1 ][ y ] = 4;
+			}
+	
+			if( board2[ x ][ y ] == 4 && board2[ x ][ y + 2 ] == 4 ) {
+				board2[ x ][ y + 1 ] = 4;
+			}
+		}
+	}
+
+	// Variables that control the cloud generation
+	seed = 100; 	// Generates a number between 0 and n - 1 
+	number = 95 + addition; // Amount the total must be higher than 
+	addition = 8; // Amount added for each land found
+	division = 1; // Amount that the final addition amount is divided by
+	plus = 1; // Amount added to the seed
+
+	// Once again generate new cloud based on surrounding pieces of land
+	for( int i = 0; i < 100; i++ ) {
+		for( int y = 5; y < 134; y++ ) {
+			for( int x = 5; x < 134; x++ ) {	
+				count = 0;
+				// Count the land in a 3x3 grid of the space
+				for( int n = 0; n < 3; n += 2 ) {
+					for( int m = 0; m < 3; m += 2 ) {
+						if( board2[ x - 1 + m ][ y - 1 + n ] == 4 ) {
+							count += addition;
+						}
+					}
+				}
+				if( count != 0 ) {
+					amount = plus + count / division + rand() % seed;
+					if( amount > number ){
+						board2[ x ][ y ] = 4;
+					}
+				}
+			}
+		}
+	}	
+	*/
 
 	// Expand the map from 144x144 to 576x576 so that we can get the best
 	// picture when it renders.
-	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock 
 	for( int y = 0; y < 144; y++ ) {
 		for( int x = 0; x < 144; x++ ) {
 
@@ -570,6 +901,9 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					break;
 				case 3:
 					PutPixel( Window, x, y, 7, 159, 15 );
+					break;
+				case 4:
+					PutPixel( Window, x, y, 64, 66, 77 );
 					break;
 				default:
 					break;
