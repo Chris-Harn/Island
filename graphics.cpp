@@ -6,7 +6,7 @@ Graphics::Graphics() {
 
 	assert( TTF_Init() != -1 && "TTF_Init failed to initalize." );
 
-	Window = SDL_SetVideoMode( 144, 144, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE );
+	Window = SDL_SetVideoMode( 576, 576, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE );
 
 	assert( Window != NULL && "Window failed to set up correctly." );
 
@@ -180,6 +180,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// of land
 	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
 
+	Uint8 board3[ 576 ][ 576 ];
 	
 	// Begin cutting up the island. Cutting out the outside 50% of each
 	// grid square
@@ -289,7 +290,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 1 ) {
 							amount = 1 + rand() % 100;
-							if( amount > 80 ){
+							if( amount > 70 ){
 								board2[ x ][ yTotal ] = 1;
 								// board2[ x ][ yStart ] = 1;
 							}
@@ -382,14 +383,63 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 			}
 		}
 	}	
+
+	// Expand the map from 144x144 to 576x576 so that we can get the best
+	// picture when it renders.
+	// 0 = water, 1 = sand, 2 = grass, 3 = forest, 4 = rock, 5 = mountain
+	for( int y = 0; y < 144; y++ ) {
+		for( int x = 0; x < 144; x++ ) {
+
+			for( int n = 0; n < 4; n++ ) {
+				for( int m = 0; m < 4; m++ ) {
+					board3[ m + x * 4 ][ n + y * 4 ] = board2[ x ][ y ];
+				}
+			}
+
+		}
+	}
+
+	// Clear the first map to use to record possibities for forest
+	for( int y = 0; y < 18; y++ ) {
+		for( int x = 0; x < 18; x++ ) {
+			board[ x ][ y ] = 0;
+		}
+	}
+
+	// Now use the first map to record where to place forest
+	for( int y = 0; y < 18; y++ ) {
+		for( int x = 0; x < 18; x++ ) {
+
+			for( int n = 0; n < 8; n++ ) {
+				for( int m = 0; m < 8; m++ ) {
+					if( board2[ m + x * 8 ][ n + y * 8 ] == 2 ) {
+						board[ x ][ y ] += 1;
+					} 
+				}
+			}
+
+		}
+	}
+
+	int locationX, locationY;
+	// Now start drawing the forest
+	if( int y = 0; y < 18; y++ ) {
+		if( int x = 0; x < 18; x++ ) {
+			if( board[ x ][ y ] > 25 ) {
+				locationX = 1 + rand() % 8;
+				locationY = 1 + rand() % 8; 
+			} 
+		}
+	}
+
 	// Render the new island to screen, pixel by pixel
 	if( SDL_MUSTLOCK( Window ) ) {
 		assert( SDL_LockSurface( Window ) < 0 );
 	}
 	
-	for( int x = 0; x < 144; x++ ) {
-		for( int y = 0; y < 144; y++ ) {
-			switch( board2[ x ][ y ] ) {
+	for( int x = 0; x < 576; x++ ) {
+		for( int y = 0; y < 576; y++ ) {
+			switch( board3[ x ][ y ] ) {
 				case 0:
 					PutPixel( Window, x, y, 54, 73, 255 );
 					break;

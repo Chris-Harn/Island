@@ -12,7 +12,7 @@ int main( int argc, char **argv ) {
 		Engine.HandleInput();
 		Engine.DrawScreen();
 		
-		SDL_Delay( 1000 );
+		SDL_Delay( 2000 );
 	}
 
 	return 0;
