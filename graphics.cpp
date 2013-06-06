@@ -456,7 +456,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 	// Pass over every piece of forest and get rid of the jagged edges
 	// Variables that control the forest generation
 	seed = 25; 	// Generates a number between 0 and n - 1 
-	number = 34; // Amount the total must be higher than 
+	number = 40	; // Amount the total must be higher than 
 	addition = 7; // Amount added for each land found
 	division = 3; // Amount that the final addition amount is divided by
 	plus = 1; // Amount added to the seed
@@ -539,6 +539,11 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 		locationX = 16 + rand() % 112;
 		locationY = 16 + rand() % 112;
 
+		if( board2[ locationX ][ locationY ] == 1 ) {
+			locationX = 16 + rand() % 112;
+			locationY = 16 + rand() % 112;
+		}
+
 		board2[ locationX ][ locationY ] = 4;
 	
 		xStart = locationX - 1;
@@ -606,7 +611,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 
 	// Create a mountain range in the center
 	int choice;
-	for( int times = 0; times < 20 + rand() % 10; times++ ) {
+	for( int times = 0; times < 40 + rand() % 20; times++ ) {
 		choice = 1 + rand() % 4;
 		switch( choice ) {
 			case 1:
@@ -643,7 +648,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 				for( int n = 0; n < 3; n++ ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ x - 1 + m ][ yStart - 1 + n ] == 4 ) {
-							if( 1 + rand() % 100 > 80 ) {
+							if( 1 + rand() % 100 > 90 ) {
 								board2[ x ][ yStart ] = 4;
 							}
 						}
@@ -655,7 +660,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 				for( int n = 0; n < 3; n++ ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ xTotal - 1 + m ][ y - 1 + n ] == 4 ) {
-							if( 1 + rand() % 100 > 80 ) {
+							if( 1 + rand() % 100 > 90 ) {
 								board2[ xTotal ][ y ] = 4;
 							}
 						}
@@ -668,7 +673,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 				for( int n = 0; n < 3; n++ ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ x - 1 + m ][ yTotal - 1 + n ] == 4 ) {
-							if( 1 + rand() % 100 > 80 ) {
+							if( 1 + rand() % 100 > 90 ) {
 								board2[ x ][ yTotal ] = 4;
 							}
 						}
@@ -680,7 +685,7 @@ void Graphics::Stage2Generation( Uint8 board[][18], Uint8 board2[][144] ) {
 				for( int n = 0; n < 3; n++ ) {
 					for( int m = 0; m < 3; m++ ) {
 						if( board2[ xStart - 1 + m ][ y - 1 + n ] == 4 ) {
-							if( 1 + rand() % 100 > 80 ) {
+							if( 1 + rand() % 100 > 90 ) {
 								board2[ xStart ][ y ] = 4;
 							}
 						}
