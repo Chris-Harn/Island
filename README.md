@@ -1,12 +1,12 @@
 
-Procedural Island Generator By Chris Harn
+Procedural Island Generator
 ======
 
 ![Generated Island](/screenshots/island50.bmp?raw=true)
 
 Procedural island generator for an undisclosed simulation project. Written using C++, SDL, g++, VIM and Screen GNU.  Compiled in g++ on Xbuntu.  
 
-Started May 29th, 2013. Completed June 28th, 2013.
+Started May 29th, 2013. Completed June 28th, 2013 by Chris Harn.
 
 ## Controls
 
