@@ -26,7 +26,7 @@ These files need to be put in the directory:
 
 To build this project, you need to make sure all the needed files are include in the Island directory: SDL.dll and sdlgfx.dll.
 
-To ompile and run:
+To compile and run:
 
     make
     ./main
