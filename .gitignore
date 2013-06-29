@@ -25,6 +25,4 @@ main
 *.ttf
 
 # Files For Testing
-*.bmp
 *.out
-*.txt
