@@ -14,8 +14,13 @@ public:
 	void					Stage2Generation( Uint8 board[][18], Uint8 board2[][144] );
 	void					PutPixel( SDL_Surface* screen, int x, int y, Uint8 Rb, Uint8 Gb, Uint8 Bb );
 	void					DrawScreen();
+	void					PrintPicture();
+	
+public:
+	int						FileNum;
+
 private:
-	SDL_Surface*			Window;
+	SDL_Surface*			Window;	
 	TTF_Font*				Font;
 	SDL_Event				Event;
 	bool					Running;

@@ -20,6 +20,8 @@ Graphics::Graphics() {
 	assert( Font != NULL && "arial.ttf failed to load." );
 	
 	srand( time( 0 ) );
+	
+	FileNum = 50;
 }
 
 Graphics::~Graphics() {
@@ -44,8 +46,11 @@ void Graphics::HandleInput() {
 						Running = false;
 						break;
 					case SDLK_SPACE:
-						SDL_Delay( 1000 );
-						break;			
+						SDL_Delay( 3000 );
+					 	break;		
+					case SDLK_RETURN:
+						PrintPicture();
+						break;
 					default:
 						break;
 				}
@@ -931,4 +936,50 @@ void Graphics::PutPixel( SDL_Surface* screen, int x, int y, Uint8 Rb, Uint8 Gb, 
 
 void Graphics::DrawScreen() {
 	SDL_Flip( Window );
+}
+
+void Graphics::PrintPicture() {
+	std::fstream a_file( "./screenshots/count.txt" );
+	
+
+	if( !a_file.is_open() ) {
+		printf("Could not find the file. Creating count.txt.\n");
+		std::ostringstream convert;
+		std::ofstream a_file( "./screenshots/count.txt" );
+		FileNum = 100;
+
+		convert << FileNum;
+		a_file << convert.str();
+		a_file.close();
+	}
+	else {
+		a_file.close();
+		
+		std::string Result;
+		printf("Found count.txt. Updating the number.\n");
+		a_file >> Result;
+
+		std::istringstream convert( Result );
+		convert >> FileNum;
+
+		printf("Found file num: %d.\n", FileNum);
+		FileNum += 1;
+		a_file.close();
+
+		std::ofstream a_file( "./screenshots/count.txt", std::ios::trunc );
+		a_file << FileNum;
+		a_file.close();
+	}
+
+	std::string saveFile;
+	std::ostringstream fileNumber;
+	fileNumber << FileNum;
+	saveFile = "./screenshots/island" + fileNumber.str() + ".bmp";
+
+	char *NameOfFile = (char*)saveFile.c_str();
+
+	SDL_SaveBMP( Window, NameOfFile );	
+	
+	printf("New FileNum = %d.\n", FileNum );
+	printf("Printed out file %s.\n", NameOfFile );
 }
