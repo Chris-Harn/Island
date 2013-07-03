@@ -2,7 +2,7 @@
 Procedural Island Generator
 ======
 
-![Generated Island](/screenshots/island50.bmp?raw=true)
+![Generated Island](/screenshots/island50.png?raw=true)
 
 Procedural island generator for an undisclosed simulation project. Written using C++, SDL, g++, VIM and Screen GNU.  Compiled in g++ on Xbuntu.  
 
